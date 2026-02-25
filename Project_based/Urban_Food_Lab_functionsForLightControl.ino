@@ -4,7 +4,7 @@ functionsForLightControl.ino
 Arduino code for the manual control of four LED light phase,
 which will be input from two buttons.
 
-Rui Wang
+RW
 */
 
 const int whitePin = 3;
@@ -29,7 +29,14 @@ if only bottonOne is pressed:
   go to next stage
 */
 
-int currStage = 0; // default off
+enum LedStage{
+  OFF = 0,
+  SEEDLING,
+  VEGETATIVE,
+  FLOWERING,
+};
+
+LedStage currStage = OFF; // default off
 
 //To triger stage changing in the loop
 int lastB1 = HIGH;
@@ -56,13 +63,13 @@ void loop(){
   //reset
   if(b2 == LOW && lastB2 == HIGH){
     Serial.print("reset to off, stage 0");
-    currStage = 0;
+    currStage = OFF;
     delay(200);
   }
   //only buttonOne pressed
   else if(b1 == LOW && lastB1 == HIGH && b2 == HIGH){
     Serial.print("go to next stage");
-    currStage ++;
+    currStage = currStage + 1;
     currStage = currStage % 4;
     delay(200);
   }
@@ -77,16 +84,16 @@ void loop(){
 
 void Growth(int phase){
   switch(phase){
-    case 0:
+    case OFF:
       off();
       break;
-    case 1:
+    case SEEDLING:
       seedling();
       break;
-    case 2:
+    case VEGETATIVE:
       vegetative();
       break;
-    case 3:
+    case FLOWERING:
       flowering();
       break;
   }
