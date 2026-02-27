@@ -4,7 +4,7 @@ functionsForLightControl.ino
 Arduino code for the manual control of four LED light phase,
 which will be input from two buttons.
 
-RW
+Rui Wang
 */
 
 const int whitePin = 3;
@@ -12,7 +12,6 @@ const int bluePin = 5;
 const int redPin = 6;
 
 const int buttonOne = 2;
-const int buttonTwo = 4;
 
 /*
 Stage order
@@ -20,12 +19,8 @@ off (0) -> seedling (1) -> vegetative(2) -> flowering (3) -> back to off
 */
 
 /*
-==+ two button signal logic +==
-if buttonTwo is pressed:
-  off mode (reset)
-if both bottons are pressed:
-  off mode (reset)
-if only bottonOne is pressed:
+==+ signal logic +==
+bottonOne is pressed:
   go to next stage
 */
 
@@ -40,7 +35,6 @@ LedStage currStage = OFF; // default off
 
 //To triger stage changing in the loop
 int lastB1 = HIGH;
-int lastB2 = HIGH;
 
 
 void setup(){
@@ -49,7 +43,6 @@ void setup(){
     pinMode(redPin, OUTPUT);
 
     pinMode(buttonOne, INPUT_PULLUP);
-    pinMode(buttonTwo, INPUT_PULLUP);
 
     Serial.begin(9600); //for print out message
 
@@ -58,16 +51,9 @@ void setup(){
 
 void loop(){
   int b1 = digitalRead(buttonOne);
-  int b2 = digitalRead(buttonTwo);
 
-  //reset
-  if(b2 == LOW && lastB2 == HIGH){
-    Serial.print("reset to off, stage 0");
-    currStage = OFF;
-    delay(200);
-  }
-  //only buttonOne pressed
-  else if(b1 == LOW && lastB1 == HIGH && b2 == HIGH){
+  //buttonOne pressed
+  if(b1 == LOW && lastB1 == HIGH){
     Serial.print("go to next stage");
     currStage = currStage + 1;
     currStage = currStage % 4;
@@ -76,8 +62,6 @@ void loop(){
   else{
     Serial.print("Not recognized button pattern. Failed. Try again.");
   }
-  lastB1 = b1;
-  lastB2 = b2;
 
   Growth(currStage);
 }
@@ -101,24 +85,28 @@ void Growth(int phase){
 
 //more blue less red
 void seedling(){
+  Serial.print("Seedling Stage");
   analogWrite(bluePin, 220);
   analogWrite(redPin, 60);
 }
 
 //mid blue mid red
 void vegetative(){
+  Serial.print("Vegetative Stage");
   analogWrite(bluePin, 200);
   analogWrite(redPin, 120);
 }
 
 //less blue more red
 void flowering(){
+  Serial.print("Flowering Stage");
   analogWrite(bluePin, 100);
   analogWrite(redPin, 220);
 }
 
 //no
 void off(){
+  Serial.print("Off");
   analogWrite(whitePin, 0);
   analogWrite(bluePin, 0);
   analogWrite(redPin, 0);
