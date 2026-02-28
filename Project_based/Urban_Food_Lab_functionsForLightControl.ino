@@ -4,7 +4,7 @@ functionsForLightControl.ino
 Arduino code for the manual control of four LED light phase,
 which will be input from two buttons.
 
-Rui Wang
+RW
 */
 
 const int whitePin = 3;
@@ -24,14 +24,14 @@ bottonOne is pressed:
   go to next stage
 */
 
-enum LedStage{
+/*enum LedStage{
   OFF = 0,
   SEEDLING,
   VEGETATIVE,
   FLOWERING,
-};
+};*/
 
-LedStage currStage = OFF; // default off
+int currStage = 0; // default off
 
 //To triger stage changing in the loop
 int lastB1 = HIGH;
@@ -54,13 +54,10 @@ void loop(){
 
   //buttonOne pressed
   if(b1 == LOW && lastB1 == HIGH){
-    Serial.print("go to next stage");
+    Serial.print("go to next stage\n");
     currStage = currStage + 1;
     currStage = currStage % 4;
     delay(200);
-  }
-  else{
-    Serial.print("Not recognized button pattern. Failed. Try again.");
   }
 
   Growth(currStage);
@@ -68,16 +65,16 @@ void loop(){
 
 void Growth(int phase){
   switch(phase){
-    case OFF:
+    case 0:
       off();
       break;
-    case SEEDLING:
+    case 1:
       seedling();
       break;
-    case VEGETATIVE:
+    case 2:
       vegetative();
       break;
-    case FLOWERING:
+    case 3:
       flowering();
       break;
   }
@@ -85,28 +82,28 @@ void Growth(int phase){
 
 //more blue less red
 void seedling(){
-  Serial.print("Seedling Stage");
+  Serial.print("Seedling Stage\n");
   analogWrite(bluePin, 220);
   analogWrite(redPin, 60);
 }
 
 //mid blue mid red
 void vegetative(){
-  Serial.print("Vegetative Stage");
+  Serial.print("Vegetative Stage\n");
   analogWrite(bluePin, 200);
   analogWrite(redPin, 120);
 }
 
 //less blue more red
 void flowering(){
-  Serial.print("Flowering Stage");
+  Serial.print("Flowering Stage\n");
   analogWrite(bluePin, 100);
   analogWrite(redPin, 220);
 }
 
 //no
 void off(){
-  Serial.print("Off");
+  Serial.print("Off\n");
   analogWrite(whitePin, 0);
   analogWrite(bluePin, 0);
   analogWrite(redPin, 0);
