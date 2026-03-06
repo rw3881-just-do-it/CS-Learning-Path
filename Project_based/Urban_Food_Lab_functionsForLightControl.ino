@@ -13,23 +13,6 @@ const int redPin = 6;
 
 const int buttonOne = 2;
 
-/*
-Stage order
-off (0) -> seedling (1) -> vegetative(2) -> flowering (3) -> back to off
-*/
-
-/*
-==+ signal logic +==
-bottonOne is pressed:
-  go to next stage
-*/
-
-/*enum LedStage{
-  OFF = 0,
-  SEEDLING,
-  VEGETATIVE,
-  FLOWERING,
-};*/
 
 int currStage = 0; // default off
 
@@ -50,6 +33,7 @@ void setup(){
 }
 
 void loop(){
+  
   int b1 = digitalRead(buttonOne);
 
   //buttonOne pressed
@@ -83,22 +67,25 @@ void Growth(int phase){
 //more blue less red
 void seedling(){
   Serial.print("Seedling Stage\n");
-  analogWrite(bluePin, 220);
-  analogWrite(redPin, 60);
+  analogWrite(bluePin, 77);
+  analogWrite(redPin, 179);
+  analogWrite(whitePin, 220);
 }
 
 //mid blue mid red
 void vegetative(){
   Serial.print("Vegetative Stage\n");
-  analogWrite(bluePin, 200);
-  analogWrite(redPin, 120);
+  analogWrite(bluePin, 38);
+  analogWrite(redPin, 217);
+  analogWrite(whitePin, 220);
 }
 
 //less blue more red
 void flowering(){
   Serial.print("Flowering Stage\n");
-  analogWrite(bluePin, 100);
-  analogWrite(redPin, 220);
+  analogWrite(bluePin, 26);
+  analogWrite(redPin, 230);
+  analogWrite(whitePin, 220);
 }
 
 //no
