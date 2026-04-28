@@ -18,3 +18,4 @@ int jumpFloor(int number){
 int main(){
     cout << jumpFloor(7) << endl;
 }
+/*another way to code it is using recursion, but be mindful that stair(n) = fibonacci (n+1)*/
